@@ -48,4 +48,7 @@ dependencies {
     testImplementation(libs.constraintlayout)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso)
+
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
 }

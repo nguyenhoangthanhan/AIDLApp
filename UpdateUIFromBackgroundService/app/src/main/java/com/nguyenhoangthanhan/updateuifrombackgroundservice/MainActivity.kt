@@ -3,12 +3,13 @@ package com.nguyenhoangthanhan.updateuifrombackgroundservice
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.nguyenhoangthanhan.updateuifrombackgroundservice.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity(), AppReceiver{
+class MainActivity : AppCompatActivity(), AppReceiver {
     private val TAG = "MainActivity_TAG"
 
     private lateinit var binding: ActivityMainBinding
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity(), AppReceiver{
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registerService();
+        registerService()
     }
 
     /*
@@ -43,8 +44,8 @@ class MainActivity : AppCompatActivity(), AppReceiver{
          * Step 3: Handle the results from the intent service here!
          * */
 
-        val result:String? = resultData?.getString("current_status")
-        if (result == null){
+        val result: String? = resultData?.getString("current_status")
+        if (result == null) {
             Log.d(TAG, "result = null!!!!!!!!!!")
         }
 
