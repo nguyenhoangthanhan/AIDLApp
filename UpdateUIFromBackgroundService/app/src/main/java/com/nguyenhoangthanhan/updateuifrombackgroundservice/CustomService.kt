@@ -2,23 +2,15 @@ package com.nguyenhoangthanhan.updateuifrombackgroundservice
 
 import android.app.Service
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
-import android.os.ResultReceiver
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 
 class CustomService : Service() {
@@ -29,9 +21,11 @@ class CustomService : Service() {
 
     private val disposable = CompositeDisposable()
 
-    val STATUS_RUNNING = 0
-    val STATUS_FINISHED = 1
-    val STATUS_ERROR = 2
+    companion object {
+        const val STATUS_RUNNING = 0
+        const val STATUS_FINISHED = 1
+        const val STATUS_ERROR = 2
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "#onBind")
@@ -40,10 +34,15 @@ class CustomService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "#onStartCommand")
-        /*
+        /* Way 1:
          * Step 1: We pass the ResultReceiver from the activity to the intent service via intent.
          *  */
-        val receiver: ResultReceiver? = intent!!.getParcelableExtra("receiver")
+//        val receiver: ResultReceiver? = intent!!.getParcelableExtra("receiver")
+
+        /* Way 2:
+         * Step 1: We pass the Handler from the activity to the intent service via intent.
+         *  */
+        val m: Messenger = intent!!.getParcelableExtra("handler")!!
 
         //TODO: process background task here!
 
@@ -63,10 +62,18 @@ class CustomService : Service() {
         val t: Thread = object : Thread() {
             override fun run() {
                 for (i in 0..20 step 1) {
-                    val b = Bundle()
                     Log.d(TAG, "i = $i")
-                    b.putString("current_status", "i = $i")
-                    receiver?.send(STATUS_FINISHED, b)
+//                    val b = Bundle()
+//                    b.putString("current_status", "i = $i")
+//                    apply ResultReceiver to update UI
+//                    receiver?.send(STATUS_FINISHED, b)
+
+//                    apply Handler to update UI
+
+                    val msg = Message()
+                    msg.obj = "i = $i"
+                    msg.what = STATUS_FINISHED
+                    m.send(msg)
                     sleep(2000)
                 }
             }

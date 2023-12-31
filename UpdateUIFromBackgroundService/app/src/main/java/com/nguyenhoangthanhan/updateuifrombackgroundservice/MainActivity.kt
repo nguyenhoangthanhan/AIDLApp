@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.nguyenhoangthanhan.updateuifrombackgroundservice.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity(), AppReceiver {
+class MainActivity : AppCompatActivity(), AppReceiver, CustomHandler.AppReceiver {
     private val TAG = "MainActivity_TAG"
 
     private lateinit var binding: ActivityMainBinding
@@ -21,13 +23,15 @@ class MainActivity : AppCompatActivity(), AppReceiver {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registerService()
+//        registerServiceApplyResultReceiverToUpdateUI()
+
+        registerServiceApplyHandlerToUpdateUI()
     }
 
     /*
      * Step 1: Register the intent service in the activity
      * */
-    private fun registerService() {
+    private fun registerServiceApplyResultReceiverToUpdateUI() {
         val intent = Intent(applicationContext, CustomService::class.java)
 
         /*
@@ -35,6 +39,21 @@ class MainActivity : AppCompatActivity(), AppReceiver {
          * */
         resultReceiver = CustomResultReceiver(Handler(), this)
         intent.putExtra("receiver", resultReceiver)
+        startService(intent)
+    }
+
+    /*
+     * Step 1: Register the intent service in the activity
+     * */
+    private fun registerServiceApplyHandlerToUpdateUI(){
+        val intent = Intent(applicationContext, CustomService::class.java)
+
+
+        /*
+         * Step 2: We pass the handler via the intent to the intent service
+         * */
+        val handler = CustomHandler(this)
+        intent.putExtra("handler", Messenger(handler))
         startService(intent)
     }
 
@@ -62,5 +81,16 @@ class MainActivity : AppCompatActivity(), AppReceiver {
          * */if (resultReceiver != null) {
             resultReceiver = null
         }
+    }
+
+    override fun onReceiveResult(message: Message) {
+        /*
+         * Step 3: Handle the results from the service here!
+         * */
+
+        if (message.what == CustomService.STATUS_FINISHED) {
+            binding.tvCount.text = message.obj.toString()
+        }
+
     }
 }
