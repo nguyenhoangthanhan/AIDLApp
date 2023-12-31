@@ -49,6 +49,8 @@ work-runtime-ktx = "2.9.0"
 rxandroid = "3.0.2"
 #rxjava version
 rxjava = "3.1.5"
+navigation-fragment-ktx = "2.7.6"
+navigation-ui-ktx = "2.7.6"
 
 [libraries]
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCore" }
@@ -153,6 +155,8 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 rxandroid = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxandroid" }
 #RxAndroid3
 rxjava = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxjava" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -26,6 +26,15 @@ class MainActivity : AppCompatActivity(), AppReceiver, CustomHandler.AppReceiver
 //        registerServiceApplyResultReceiverToUpdateUI()
 
         registerServiceApplyHandlerToUpdateUI()
+
+        binding.btnOpenUpdateUiBroadcastReceiver.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    UpdateUIByBroadcastReceiverActivity::class.java
+                ).also { it.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP }
+            )
+        }
     }
 
     /*
@@ -45,7 +54,7 @@ class MainActivity : AppCompatActivity(), AppReceiver, CustomHandler.AppReceiver
     /*
      * Step 1: Register the intent service in the activity
      * */
-    private fun registerServiceApplyHandlerToUpdateUI(){
+    private fun registerServiceApplyHandlerToUpdateUI() {
         val intent = Intent(applicationContext, CustomService::class.java)
 
 
